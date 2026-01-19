@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"ogani-backend/config"
+	"ogani-backend/migrations"
+	"ogani-backend/routes"
+)
 
 func main() {
-	fmt.Println("Backend starting...")
+	config.ConnectDB()
+	migrations.Migrate()
+	migrations.Seed(config.GetDB())
+	routes.SetupRouter().Run(":8080")
 }
