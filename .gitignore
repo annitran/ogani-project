@@ -1,0 +1,7 @@
+# frontend
+ogani-frontend/node_modules
+
+# backend
+
+# env
+.env
