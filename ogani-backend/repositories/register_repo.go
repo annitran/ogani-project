@@ -10,7 +10,7 @@ import (
 
 type UserRegister interface {
 	CheckUsername(username string) (*models.User, error)
-	CreateUser(display_name, username, password, role string) (*models.User, error)
+	CreateUser(username, password, role string) (*models.User, error)
 }
 
 type userRegister struct {
@@ -34,7 +34,7 @@ func (r *userRegister) CheckUsername(username string) (*models.User, error) {
 	return &existedUser, nil
 }
 
-func (r *userRegister) CreateUser(username, display_name, password, role string) (*models.User, error) {
+func (r *userRegister) CreateUser(username, password, role string) (*models.User, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	if err != nil {
@@ -42,10 +42,9 @@ func (r *userRegister) CreateUser(username, display_name, password, role string)
 	}
 
 	user := models.User{
-		DisplayName: display_name,
-		Username:    username,
-		Password:    string(hashedPassword),
-		Role:        "user",
+		Username: username,
+		Password: string(hashedPassword),
+		Role:     "user",
 	}
 
 	if err := r.db.Create(&user).Error; err != nil {
