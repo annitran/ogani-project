@@ -1,50 +1,51 @@
-import { Button, Form, Input, Typography, Card } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Form, Input, Card, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { register } from "../services/auth";
+import { useAuthStore } from "../stores/authStore";
 
 const { Title } = Typography;
 
-export default function Register() {
-  const onFinish = () => {
-    console.log("Register data:");
-    // TODO: call register API
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const { loading, setLoading } = useAuthStore();
+
+  const handleRegister = async (values: { username: string, password: string }) => {
+    try {
+      setLoading(true);
+      await register(values);
+      navigate("/login");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        alert(err.response?.data?.message || 'Register failed')
+      } else {
+        console.error('Unexpected error', err)
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f5f5f5",
-      }}
-    >
+    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: 400 }}>
-        <Title level={3} style={{ textAlign: "center" }}>
-          Sign up
-        </Title>
+        <Title level={3} style={{ textAlign: "center" }}>Sign Up</Title>
 
-        <Form layout="vertical" onFinish={onFinish}>
+        <Form layout="vertical" onFinish={handleRegister}>
           <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please input your email" },
-              { type: "email", message: "Invalid email format" },
-            ]}
+            label="Username"
+            name="username"
+            rules={[{ required: true, message: "Username is required" }]}
           >
-            <Input placeholder="Enter your email" />
+            <Input />
           </Form.Item>
 
           <Form.Item
             label="Password"
             name="password"
-            rules={[
-              { required: true, message: "Please input your password" },
-              { min: 6, message: "Password must be at least 6 characters" },
-            ]}
+            rules={[{ required: true }, { min: 6 }]}
           >
-            <Input.Password placeholder="Enter your password" />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item
@@ -52,24 +53,22 @@ export default function Register() {
             name="confirmPassword"
             dependencies={["password"]}
             rules={[
-              { required: true, message: "Please confirm your password" },
+              { required: true },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || value === getFieldValue("password")) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(
-                    new Error("Passwords do not match")
-                  );
+                  return Promise.reject("Passwords do not match");
                 },
               }),
             ]}
           >
-            <Input.Password placeholder="Confirm your password" />
+            <Input.Password />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit" block>
-            Sign up
+          <Button type="primary" htmlType="submit" block loading={loading}>
+            Sign Up
           </Button>
 
           <div style={{ marginTop: 16, textAlign: "center" }}>

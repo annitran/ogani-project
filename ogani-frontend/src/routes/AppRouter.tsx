@@ -8,6 +8,7 @@ export default function AppRouter() {
   return (
       <Routes>
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<div>Login page</div>} />
 
         <Route element={<AppLayout />}>
           <Route path="/" element={<Dashboard />} />
