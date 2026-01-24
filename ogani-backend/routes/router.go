@@ -22,9 +22,11 @@ func SetupRouter() *gin.Engine {
 	}))
 
 	registerHandler := handlers.NewRegisterHandler(repositories.NewUserRegister())
+	loginHandler := handlers.NewLoginHandler(repositories.NewUserLogin())
 
 	router.GET("/", handlers.Home)
-	router.POST("/api/v1/register", registerHandler.Create)
+	router.POST("/api/v1/register", registerHandler.Register)
+	router.POST("/api/v1/login", loginHandler.Login)
 
 	auth := router.Group("/api/v1")
 	auth.Use(middlewares.AuthToken())

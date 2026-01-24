@@ -1,4 +1,6 @@
 import { Layout, Menu, Input } from "antd"
+import { UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Header: AntHeader } = Layout
 
@@ -30,6 +32,21 @@ export default function AppHeader() {
 
         {/* Search */}
         <Input.Search placeholder="What do you need?" style={{ width: 240 }} />
+
+        {/* Login icon + text */}
+        <Link
+          to="/login"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            color: "#000",
+            fontWeight: 500,
+          }}
+        >
+          <UserOutlined />
+          <span>Login</span>
+        </Link>
       </div>
     </AntHeader>
   )
