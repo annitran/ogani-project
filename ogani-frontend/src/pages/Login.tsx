@@ -1,18 +1,35 @@
 import { Button, Form, Input, Card, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import { login, type IUserParam } from "../services/auth"
+import { useAuthStore } from "../stores/authStore"
+import axios from "axios";
 
 const { Title } = Typography;
 
 export default function LoginPage() {
+  const setAuth = useAuthStore((s) => s.setAuth)
+  const loading = useAuthStore((s) => s.loading)
+  const setLoading = useAuthStore((s) => s.setLoading)
+
   const navigate = useNavigate();
 
-  const handleLogin = async (values: {
-    username: string;
-    password: string;
-  }) => {
-    // tạm thời chỉ log & redirect
-    console.log("Login values:", values);
-    navigate("/");
+  const handleLogin = async (values: IUserParam) => {
+    try {
+      setLoading(true);
+
+      const res = await login(values)
+      setAuth(res.data.user, res.data.token)
+
+      navigate("/")
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        alert(err.response?.data?.message || 'Login failed')
+      } else {
+        console.error('Unexpected error', err)
+      }
+    } finally {
+      setLoading(false)
+    }
   };
 
   return (
@@ -46,7 +63,7 @@ export default function LoginPage() {
             <Input.Password />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block loading={loading}>
             Login
           </Button>
 

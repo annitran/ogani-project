@@ -5,9 +5,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"ogani-backend/repositories"
 )
 
-func AuthToken() gin.HandlerFunc {
+func AuthToken(repo repositories.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 1. Get Authorization header
 		authHeader := c.GetHeader("Authorization")
@@ -38,9 +39,17 @@ func AuthToken() gin.HandlerFunc {
 			return
 		}
 
-		// 4. Set user info to context
-		c.Set("username", claims.Username)
-		c.Set("role", claims.Role)
+		// 4. Query user từ DB
+		user, err := repo.FindByUsername(claims.Username)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "User not found",
+			})
+			return
+		}
+
+		// 5. Set user info to context
+		c.Set("user", user)
 
 		c.Next()
 	}

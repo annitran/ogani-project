@@ -1,16 +1,12 @@
 import { create } from "zustand";
-
-interface User {
-  id: number;
-  username: string;
-}
+import { type IUser } from "../services/auth"
 
 interface AuthState {
-  user: User | null;
+  user: IUser | null;
   token: string | null;
   loading: boolean;
 
-  setAuth: (user: User, token: string) => void;
+  setAuth: (user: IUser, token: string) => void;
   clearAuth: () => void;
   setLoading: (loading: boolean) => void;
 }
