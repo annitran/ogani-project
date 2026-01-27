@@ -13,7 +13,9 @@ export default function RegisterPage() {
   const handleRegister = async (values: { username: string, password: string }) => {
     try {
       setLoading(true);
+
       await register(values);
+
       navigate("/login");
     } catch (err) {
       if (axios.isAxiosError(err)) {

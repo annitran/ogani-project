@@ -23,7 +23,7 @@ func NewRegisterHandler(repo repositories.UserRegister) *registerHandler {
 	}
 }
 
-func (h *registerHandler) Create(c *gin.Context) {
+func (h *registerHandler) Register(c *gin.Context) {
 	var req registerRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil || req.Username == "" || req.Password == "" {
