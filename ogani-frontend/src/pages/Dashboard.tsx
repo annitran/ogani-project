@@ -1,4 +1,4 @@
-import CategorySidebar from "../components/CategorySidebar";
+import CategorySidebar from "../components/category/CategorySidebar";
 
 export default function Dashboard() {
   return (
