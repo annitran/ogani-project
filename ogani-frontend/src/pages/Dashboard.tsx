@@ -1,8 +1,23 @@
+import CategorySidebar from "../components/CategorySidebar";
+
 export default function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Main content area</p>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "270px 1fr",
+        gap: 50,
+        padding: "0 60px 0 60px",
+      }}
+    >
+      {/* LEFT: All Departments */}
+      <CategorySidebar />
+
+      {/* RIGHT: Main content */}
+      <div>
+        <h1>Dashboard</h1>
+        <p>Main content area</p>
+      </div>
     </div>
-  )
+  );
 }

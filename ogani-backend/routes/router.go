@@ -32,7 +32,8 @@ func SetupRouter() *gin.Engine {
 	userRepo := repositories.NewUserRepository()
 	auth := router.Group("/api/v1/auth", middlewares.AuthToken(userRepo))
 	{
-		auth.GET("/profile", handlers.GetUser)
+		auth.GET("/user", handlers.GetUser)
+		auth.POST("/logout", handlers.Logout)
 	}
 
 	return router

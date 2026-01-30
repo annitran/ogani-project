@@ -1,17 +1,32 @@
-import { Menu } from "antd"
+import { Menu, type MenuProps } from "antd"
+import { MenuOutlined } from "@ant-design/icons";
+
+const items: MenuProps["items"] = [
+  {
+    key: 'departments',
+    label: (
+      <span style={{ color: "#7fad39", fontWeight: 800 }}>
+        <MenuOutlined style={{ marginRight: 15 }} />
+        All Departments
+      </span>
+    ),
+    children: [
+      { key: 'meat', label: 'Fresh Meat' },
+      { key: 'vegetables', label: 'Vegetables' },
+      { key: 'fruits', label: 'Fresh Fruits' },
+      { key: 'dried', label: 'Dried Fruits' },
+      { key: 'drink', label: 'Drink Fruits' },
+    ],
+  },
+];
 
 export default function CategorySidebar() {
   return (
     <Menu
       mode="inline"
-      style={{ height: "110%" }}
-      items={[
-        { key: "1", label: "Fresh Meat" },
-        { key: "2", label: "Vegetables" },
-        { key: "3", label: "Fresh Fruits" },
-        { key: "4", label: "Dried Fruits" },
-        { key: "5", label: "Drink Fruits" },
-      ]}
+      defaultSelectedKeys={['departments']}
+      style={{ width: 256 }}
+      items={items}
     />
   )
 }

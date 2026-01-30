@@ -23,6 +23,10 @@ export const login = (user: IUserParam) => {
   return api.post<IUserResponse>("/login", user);
 };
 
+export const logout = () => {
+  return api.post("/auth/logout");
+};
+
 export const getProfile = () => {
-  return api.get<{ user: IUser }>("/auth/profile");
+  return api.get<{ user: IUser }>("/auth/user");
 };
