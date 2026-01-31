@@ -30,6 +30,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/api/v1/login", loginHandler.Login)
 
 	router.GET("/api/v1/categories", categoryHandler.GetAllCategories)
+	router.GET("/api/v1/categories/:id", categoryHandler.GetCategoryDetail)
 
 	// auth
 	userRepo := repositories.NewUserRepository()

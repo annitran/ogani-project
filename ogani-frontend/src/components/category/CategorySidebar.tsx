@@ -1,13 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
-import { Menu } from "antd";
+import { Menu, type MenuProps } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
-import { getCategories } from "../../services/category";
+import { getCategories, getCategoryDetail } from "../../services/category";
 import { useCategoryStore } from "../../stores/useCategoryStore";
 
 export default function CategorySidebar() {
   const categories = useCategoryStore((s) => s.categories);
   const setCategories = useCategoryStore((s) => s.setCategories);
+  const setCategoryDetail = useCategoryStore((s) => s.setCategoryDetail)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,17 +49,30 @@ export default function CategorySidebar() {
     ]
   }, [categories])
 
+  const handleClick: MenuProps["onClick"] = async (e) => {
+    if (e.key === "departments") return;
+
+    const categoryId = Number(e.key);
+
+    try {
+      const res = await getCategoryDetail(categoryId);
+      const category = res.data.category;
+
+      setCategoryDetail(category, category.Products || [])
+    } catch (err) {
+      console.error("Load category detail failed", err)
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <Menu
       mode="inline"
       items={menuItems}
-      defaultSelectedKeys={["departments"]}
+      defaultOpenKeys={["departments"]}
       style={{ width: 256 }}
-      onClick={(e) => {
-        console.log("Selected category:", e.key)
-      }}
+      onClick={handleClick}
     />
   );
 }

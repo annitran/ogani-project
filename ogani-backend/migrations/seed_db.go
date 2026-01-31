@@ -48,5 +48,57 @@ func Seed(db *gorm.DB) error {
 		db.FirstOrCreate(&models.Category{}, models.Category{Name: name})
 	}
 
+	// seed products
+	var categories_list []models.Category
+	db.Find(&categories_list)
+
+	categoryMap := map[string]models.Category{}
+	for _, c := range categories_list {
+		categoryMap[c.Name] = c
+	}
+
+	if len(categoryMap) == 0 {
+		log.Println("No categories found — skip product seeding")
+		return nil
+	}
+
+	products := []models.Product{
+		{
+			Name:       "Tomato",
+			Price:      2.5,
+			Quantity:   2,
+			CategoryID: categoryMap["Vegetables"].ID,
+		},
+		{
+			Name:       "Banana",
+			Price:      2.5,
+			Quantity:   3,
+			CategoryID: categoryMap["Fresh Fruits"].ID,
+		},
+		{
+			Name:       "Beef",
+			Price:      2.5,
+			Quantity:   15,
+			CategoryID: categoryMap["Fresh Meat"].ID,
+		},
+		{
+			Name:       "Raisin",
+			Price:      2.5,
+			Quantity:   40,
+			CategoryID: categoryMap["Dried Fruits"].ID,
+		},
+		{
+			Name:       "Guava juice",
+			Price:      2.5,
+			Quantity:   0,
+			CategoryID: categoryMap["Drink Fruits"].ID,
+		},
+	}
+
+	for _, p := range products {
+		db.Where("name = ?", p.Name).
+			FirstOrCreate(&p)
+	}
+
 	return nil
 }

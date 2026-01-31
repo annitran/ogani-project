@@ -10,6 +10,7 @@ func Migrate() {
 	err := config.GetDB().AutoMigrate(
 		models.User{},
 		models.Category{},
+		models.Product{},
 	)
 
 	if err != nil {

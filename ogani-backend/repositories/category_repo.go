@@ -9,6 +9,7 @@ import (
 
 type CategoryRepository interface {
 	GetList() ([]models.Category, error)
+	GetDetail(id uint) (models.Category, error)
 }
 
 type categoryRepository struct {
@@ -29,4 +30,18 @@ func (r *categoryRepository) GetList() ([]models.Category, error) {
 	}
 
 	return categories, nil
+}
+
+func (r *categoryRepository) GetDetail(id uint) (models.Category, error) {
+	var category models.Category
+
+	err := r.db.
+		Preload("Products").
+		First(&category, id).Error
+
+	if err != nil {
+		return models.Category{}, err
+	}
+
+	return category, nil
 }
