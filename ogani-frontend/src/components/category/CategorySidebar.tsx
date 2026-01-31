@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom"
 import { Menu, type MenuProps } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
@@ -43,7 +44,11 @@ export default function CategorySidebar() {
         ),
         children: categories.map((c) => ({
           key: c.id.toString(),
-          label: c.name,
+          label: (
+            <Link to={`/categories/${c.id}`}>
+              {c.name}
+            </Link>
+          )
         })),
       },
     ]

@@ -10,6 +10,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/categories/:id" element={<Dashboard />} />
 
         <Route element={<AppLayout />}>
           <Route path="/" element={<Dashboard />} />
