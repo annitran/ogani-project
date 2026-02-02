@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Menu, type MenuProps } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
-import { getCategories, getCategoryDetail } from "../../services/category";
+import { getCategories } from "../../services/category";
 import { useCategoryStore } from "../../stores/useCategoryStore";
 
 export default function CategorySidebar() {
   const categories = useCategoryStore((s) => s.categories);
   const setCategories = useCategoryStore((s) => s.setCategories);
-  const setCategoryDetail = useCategoryStore((s) => s.setCategoryDetail)
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -48,7 +48,7 @@ export default function CategorySidebar() {
             <Link to={`/categories/${c.id}`}>
               {c.name}
             </Link>
-          )
+          ),
         })),
       },
     ]
@@ -57,16 +57,7 @@ export default function CategorySidebar() {
   const handleClick: MenuProps["onClick"] = async (e) => {
     if (e.key === "departments") return;
 
-    const categoryId = Number(e.key);
-
-    try {
-      const res = await getCategoryDetail(categoryId);
-      const category = res.data.category;
-
-      setCategoryDetail(category, category.Products || [])
-    } catch (err) {
-      console.error("Load category detail failed", err)
-    }
+    navigate(`/categories/${e.key}`)
   };
 
   if (loading) return <div>Loading...</div>;
