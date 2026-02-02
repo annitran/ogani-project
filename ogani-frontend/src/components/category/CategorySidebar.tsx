@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { Menu } from "antd";
+import { Link, useNavigate } from "react-router-dom"
+import { Menu, type MenuProps } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
 import { getCategories } from "../../services/category";
@@ -9,6 +10,7 @@ export default function CategorySidebar() {
   const categories = useCategoryStore((s) => s.categories);
   const setCategories = useCategoryStore((s) => s.setCategories);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -42,11 +44,21 @@ export default function CategorySidebar() {
         ),
         children: categories.map((c) => ({
           key: c.id.toString(),
-          label: c.name,
+          label: (
+            <Link to={`/categories/${c.id}`}>
+              {c.name}
+            </Link>
+          ),
         })),
       },
     ]
   }, [categories])
+
+  const handleClick: MenuProps["onClick"] = async (e) => {
+    if (e.key === "departments") return;
+
+    navigate(`/categories/${e.key}`)
+  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -54,11 +66,9 @@ export default function CategorySidebar() {
     <Menu
       mode="inline"
       items={menuItems}
-      defaultSelectedKeys={["departments"]}
+      defaultOpenKeys={["departments"]}
       style={{ width: 256 }}
-      onClick={(e) => {
-        console.log("Selected category:", e.key)
-      }}
+      onClick={handleClick}
     />
   );
 }
