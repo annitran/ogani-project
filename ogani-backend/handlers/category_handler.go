@@ -5,21 +5,24 @@ import (
 	"ogani-backend/repositories"
 
 	"github.com/gin-gonic/gin"
+	"math"
 	"strconv"
 )
 
 type categoryHandler struct {
-	repo repositories.CategoryRepository
+	categoryRepo repositories.CategoryRepository
+	productRepo  repositories.ProductRepository
 }
 
-func NewCategoryHandler(repo repositories.CategoryRepository) *categoryHandler {
+func NewCategoryHandler(categoryRepo repositories.CategoryRepository, productRepo repositories.ProductRepository) *categoryHandler {
 	return &categoryHandler{
-		repo: repo,
+		categoryRepo: categoryRepo,
+		productRepo:  productRepo,
 	}
 }
 
 func (h *categoryHandler) GetAllCategories(c *gin.Context) {
-	categories, err := h.repo.GetList()
+	categories, err := h.categoryRepo.GetList()
 
 	if err != nil {
 		c.JSON(500, gin.H{"message": "Failed to get categories"})
@@ -42,7 +45,7 @@ func (h *categoryHandler) GetCategoryDetail(c *gin.Context) {
 		return
 	}
 
-	category, err := h.repo.GetDetail(uint(id))
+	category, err := h.categoryRepo.GetDetail(uint(id))
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -53,5 +56,41 @@ func (h *categoryHandler) GetCategoryDetail(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"category": category,
+	})
+}
+
+func (h *categoryHandler) GetCategoryProducts(c *gin.Context) {
+	categoryID, _ := strconv.Atoi(c.Param("id"))
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "9"))
+
+	if page < 1 {
+		page = 1
+	}
+
+	products, total, err := h.productRepo.GetByCategory(
+		uint(categoryID),
+		page,
+		limit,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to get products",
+		})
+		return
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(limit)))
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": products,
+		"pagination": gin.H{
+			"page":       page,
+			"limit":      limit,
+			"totalItems": total,
+			"totalPages": totalPages,
+		},
 	})
 }

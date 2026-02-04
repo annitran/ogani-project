@@ -1,26 +1,22 @@
 import { create } from "zustand"
 import { type ICategory } from './../services/category';
-import { type IProduct } from "../services/product";
 
 interface CategoryStore {
   categories: ICategory[];
   selectedCategory?: ICategory;
-  products: IProduct[];
 
   setCategories: (categories: ICategory[]) => void
-  setCategoryDetail: (category: ICategory, products: IProduct[]) => void
+  setSelectedCategory: (category: ICategory) => void
 }
 
 export const useCategoryStore = create<CategoryStore>((set) => ({
   categories: [],
-  products: [],
 
   setCategories: (categories) =>
     set({ categories }),
 
-  setCategoryDetail: (category, products) =>
+  setSelectedCategory: (category) =>
     set({
       selectedCategory: category,
-      products,
     })
 }))

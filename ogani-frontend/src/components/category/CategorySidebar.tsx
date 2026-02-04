@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { Menu, type MenuProps } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
@@ -11,6 +11,8 @@ export default function CategorySidebar() {
   const setCategories = useCategoryStore((s) => s.setCategories);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
+
+  const { id } = useParams<{ id: string }>()
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -67,7 +69,8 @@ export default function CategorySidebar() {
       mode="inline"
       items={menuItems}
       defaultOpenKeys={["departments"]}
-      style={{ width: 256 }}
+      selectedKeys={id ? [id] : []}
+      style={{ width: 256, height: 50 }}
       onClick={handleClick}
     />
   );
