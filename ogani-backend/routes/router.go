@@ -23,7 +23,10 @@ func SetupRouter() *gin.Engine {
 
 	registerHandler := handlers.NewRegisterHandler(repositories.NewUserRegister())
 	loginHandler := handlers.NewLoginHandler(repositories.NewUserLogin())
-	categoryHandler := handlers.NewCategoryHandler(repositories.NewCategoryRepository())
+	categoryHandler := handlers.NewCategoryHandler(
+		repositories.NewCategoryRepository(),
+		repositories.NewProductRepository(),
+	)
 
 	router.GET("/", handlers.Home)
 	router.POST("/api/v1/register", registerHandler.Register)
@@ -31,6 +34,7 @@ func SetupRouter() *gin.Engine {
 
 	router.GET("/api/v1/categories", categoryHandler.GetAllCategories)
 	router.GET("/api/v1/categories/:id", categoryHandler.GetCategoryDetail)
+	router.GET("/api/v1/categories/:id/products", categoryHandler.GetCategoryProducts)
 
 	// auth
 	userRepo := repositories.NewUserRepository()

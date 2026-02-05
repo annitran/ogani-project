@@ -64,34 +64,80 @@ func Seed(db *gorm.DB) error {
 
 	products := []models.Product{
 		{
-			Name:       "Tomato",
-			Price:      2.5,
-			Quantity:   2,
-			CategoryID: categoryMap["Vegetables"].ID,
-		},
-		{
-			Name:       "Banana",
-			Price:      2.5,
-			Quantity:   3,
-			CategoryID: categoryMap["Fresh Fruits"].ID,
-		},
-		{
-			Name:       "Beef",
-			Price:      2.5,
-			Quantity:   15,
-			CategoryID: categoryMap["Fresh Meat"].ID,
-		},
-		{
-			Name:       "Raisin",
-			Price:      2.5,
-			Quantity:   40,
-			CategoryID: categoryMap["Dried Fruits"].ID,
-		},
-		{
-			Name:       "Guava juice",
-			Price:      2.5,
-			Quantity:   0,
-			CategoryID: categoryMap["Drink Fruits"].ID,
+			Name:       "Cranberry Lime Sparkling Water",
+			Price:      1.5,
+			Quantity:   62,
+			CategoryID: 5,
+		}, {
+			Name:       "Peanut Butter Pretzel Bites",
+			Price:      4.19,
+			Quantity:   99,
+			CategoryID: 2,
+		}, {
+			Name:       "Bamboo Bathtub Caddy",
+			Price:      34.99,
+			Quantity:   70,
+			CategoryID: 5,
+		}, {
+			Name:       "Suction Cup Hooks",
+			Price:      9.99,
+			Quantity:   31,
+			CategoryID: 2,
+		}, {
+			Name:       "Pepperoni Pizza Rolls",
+			Price:      6.99,
+			Quantity:   1,
+			CategoryID: 1,
+		}, {
+			Name:       "Kale Caesar Salad Kit",
+			Price:      5.99,
+			Quantity:   81,
+			CategoryID: 4,
+		}, {
+			Name:       "Pet Carrier Backpack",
+			Price:      39.99,
+			Quantity:   81,
+			CategoryID: 5,
+		}, {
+			Name:       "Digital Thermostat",
+			Price:      59.99,
+			Quantity:   20,
+			CategoryID: 1,
+		}, {
+			Name:       "Baby Safety Corner Guards",
+			Price:      9.99,
+			Quantity:   99,
+			CategoryID: 2,
+		}, {
+			Name:       "Personalized Keychain",
+			Price:      10.99,
+			Quantity:   60,
+			CategoryID: 2,
+		}, {
+			Name:       "Fridge Magnet Set",
+			Price:      15.99,
+			Quantity:   41,
+			CategoryID: 1,
+		}, {
+			Name:       "Teriyaki Chicken Wings",
+			Price:      10.99,
+			Quantity:   39,
+			CategoryID: 5,
+		}, {
+			Name:       "Carrot Sticks",
+			Price:      2.49,
+			Quantity:   32,
+			CategoryID: 1,
+		}, {
+			Name:       "Eco-Friendly Disposable Plates",
+			Price:      22.99,
+			Quantity:   93,
+			CategoryID: 2,
+		}, {
+			Name:       "Watercolor Set",
+			Price:      19.99,
+			Quantity:   49,
+			CategoryID: 5,
 		},
 	}
 
