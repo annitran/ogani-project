@@ -14,6 +14,10 @@ type categoryHandler struct {
 	productRepo  repositories.ProductRepository
 }
 
+type CreateCategoryInput struct {
+	Name string `json:"name" binding:"required"`
+}
+
 func NewCategoryHandler(categoryRepo repositories.CategoryRepository, productRepo repositories.ProductRepository) *categoryHandler {
 	return &categoryHandler{
 		categoryRepo: categoryRepo,
@@ -93,4 +97,41 @@ func (h *categoryHandler) GetCategoryProducts(c *gin.Context) {
 			"totalPages": totalPages,
 		},
 	})
+}
+
+// admin
+func (h *categoryHandler) CreateCategory(c *gin.Context) {
+	var input CreateCategoryInput
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid input",
+		})
+		return
+	}
+
+	category, err := h.categoryRepo.Create(input.Name)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to create category",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"category": category,
+	})
+}
+
+func (h *categoryHandler) DeleteCategory(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := h.categoryRepo.Delete(uint(id))
+	if err != nil {
+		c.JSON(500, gin.H{"message": "Delete failed"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Deleted"})
 }

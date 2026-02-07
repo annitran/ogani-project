@@ -16,7 +16,7 @@ export const getProducts = () => {
 export const getProductsByCategory = (
   category_id: number,
   page = 1,
-  limit = 3
+  limit = 6
 ) => {
   return api.get(`/categories/${category_id}/products`,
     { params: { page, limit } }

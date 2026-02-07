@@ -50,6 +50,22 @@ func AuthToken(repo repositories.UserRepository) gin.HandlerFunc {
 
 		// 5. Set user info to context
 		c.Set("user", user)
+		c.Set("role", user.Role)
+
+		c.Next()
+	}
+}
+
+func RequireAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role := c.GetString("role")
+
+		if role != "admin" {
+			c.AbortWithStatusJSON(403, gin.H{
+				"message": "Admin only",
+			})
+			return
+		}
 
 		c.Next()
 	}
