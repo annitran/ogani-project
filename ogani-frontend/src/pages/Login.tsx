@@ -10,7 +10,6 @@ export default function LoginPage() {
   const setAuth = useAuthStore((s) => s.setAuth)
   const loading = useAuthStore((s) => s.loading)
   const setLoading = useAuthStore((s) => s.setLoading)
-
   const navigate = useNavigate();
 
   const handleLogin = async (values: IUserParam) => {
@@ -19,8 +18,13 @@ export default function LoginPage() {
 
       const res = await login(values)
       setAuth(res.data.user, res.data.token)
+      console.log("login user:", res.data.user)
 
-      navigate("/")
+      if (res.data.user.role === "admin") {
+        navigate("/admin")
+      } else {
+        navigate("/")
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         alert(err.response?.data?.message || 'Login failed')

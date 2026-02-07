@@ -28,7 +28,6 @@ func SetupRouter() *gin.Engine {
 		repositories.NewProductRepository(),
 	)
 
-	router.GET("/", handlers.Home)
 	router.POST("/api/v1/register", registerHandler.Register)
 	router.POST("/api/v1/login", loginHandler.Login)
 
@@ -36,12 +35,20 @@ func SetupRouter() *gin.Engine {
 	router.GET("/api/v1/categories/:id", categoryHandler.GetCategoryDetail)
 	router.GET("/api/v1/categories/:id/products", categoryHandler.GetCategoryProducts)
 
-	// auth
+	// user
 	userRepo := repositories.NewUserRepository()
 	auth := router.Group("/api/v1/auth", middlewares.AuthToken(userRepo))
 	{
 		auth.GET("/user", handlers.GetUser)
 		auth.POST("/logout", handlers.Logout)
+	}
+
+	// admin
+	internal := router.Group("/api/v1/auth/internal-user", middlewares.AuthToken(userRepo), middlewares.RequireAdmin())
+	{
+		internal.GET("/categories", categoryHandler.GetAllCategories)
+		internal.POST("/categories", categoryHandler.CreateCategory)
+		internal.DELETE("/categories/:id", categoryHandler.DeleteCategory)
 	}
 
 	return router

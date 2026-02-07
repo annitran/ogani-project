@@ -3,6 +3,7 @@ import api from "./api";
 export interface IUser {
   id: number;
   username: string;
+  role: string;
 }
 
 export interface IUserParam {

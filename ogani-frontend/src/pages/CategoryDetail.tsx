@@ -1,11 +1,11 @@
 import { useEffect } from "react"
 import { useParams, useSearchParams } from "react-router-dom"
 import { Pagination } from "antd"
-import { useCategoryStore } from "../../stores/useCategoryStore"
-import { useCategoryProductStore } from "../../stores/useCategoryProductStore"
-import { getCategoryDetail } from "../../services/category"
-import { getProductsByCategory } from "../../services/product"
-import CategorySidebar from "./CategorySidebar"
+import { useCategoryStore } from "../stores/useCategoryStore"
+import { useCategoryProductStore } from "../stores/useCategoryProductStore"
+import { getCategoryDetail } from "../services/category"
+import { getProductsByCategory } from "../services/product"
+import CategorySidebar from "../components/category/CategorySidebar"
 
 export default function CategoryDetail() {
   const { id } = useParams<{ id: string }>()
@@ -21,7 +21,7 @@ export default function CategoryDetail() {
   } = useCategoryProductStore()
 
   const page = Number(searchParams.get("page")) || 1
-  const limit = 3
+  const limit = 6
 
   // fetch category info
   useEffect(() => {

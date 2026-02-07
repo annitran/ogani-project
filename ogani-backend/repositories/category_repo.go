@@ -10,6 +10,8 @@ import (
 type CategoryRepository interface {
 	GetList() ([]models.Category, error)
 	GetDetail(id uint) (models.Category, error)
+	Create(name string) (*models.Category, error)
+	Delete(id uint) error
 }
 
 type categoryRepository struct {
@@ -44,4 +46,19 @@ func (r *categoryRepository) GetDetail(id uint) (models.Category, error) {
 	}
 
 	return category, nil
+}
+
+// admin
+func (r *categoryRepository) Create(name string) (*models.Category, error) {
+	category := models.Category{
+		Name: name,
+	}
+
+	err := r.db.Create(&category).Error
+
+	return &category, err
+}
+
+func (r *categoryRepository) Delete(id uint) error {
+	return r.db.Delete(&models.Category{}, id).Error
 }
